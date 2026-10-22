@@ -136,7 +136,7 @@
         <div class="title-2 display-font text-[72px] leading-none">PASTAS</div>
       </div>
       <div class="desc mt-4 w-[500px] text-sm text-slate-300 leading-relaxed">
-        Pizzas artesanales al horno de leña, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat. El punto de referencia gastronómico en Dénia.
+        Pizzas artesanales, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat. El punto de referencia gastronómico en Dénia.
       </div>
       <div class="cta w-[500px] mt-6 flex items-center">
         <a href="http://www.casapapat.es" target="_blank" class="w-[36px] h-[36px] rounded-full bg-[#75AADB] text-white grid place-items-center shadow-lg">
@@ -162,7 +162,7 @@
         <div class="title-2 display-font text-[72px] leading-none">PASTAS</div>
       </div>
       <div class="desc mt-4 w-[500px] text-sm text-slate-300 leading-relaxed">
-        Pizzas artesanales al horno de leña, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat.
+        Pizzas artesanales, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat.
       </div>
       <div class="cta w-[500px] mt-6 flex items-center">
         <a href="http://www.casapapat.es" target="_blank" class="w-[36px] h-[36px] rounded-full bg-[#75AADB] text-white grid place-items-center shadow-lg">
@@ -191,7 +191,7 @@
     </div>
   </header>
 
-  <!-- ==================== SECCIÓN 2: DIRECTORIO Y COMERCIOS (LO QUE HABÍAMOS CREADO) ==================== -->
+  <!-- ==================== SECCIÓN 2: DIRECTORIO Y COMERCIOS ==================== -->
   <section id="directorio" class="py-20 px-6 max-w-7xl mx-auto w-full">
     <div class="text-center mb-12">
       <span class="text-xs uppercase font-bold text-sky-400 tracking-widest mb-2 inline-block">Directorio Local Inteligente</span>
@@ -208,7 +208,7 @@
         </div>
         <div class="p-6">
           <h3 class="text-xl font-bold text-white mb-2">Pizzería Casa Papat</h3>
-          <p class="text-slate-300 text-sm mb-4">Pizzas y pastas artesanales al horno de leña con masa madre y productos italianos.</p>
+          <p class="text-slate-300 text-sm mb-4">Pizzas y pastas artesanales con masa madre y productos italianos.</p>
           <div class="text-xs text-sky-300 mb-6 space-y-1">
             <p>📍 Dénia, Alicante</p>
             <p>🌐 <a href="http://www.casapapat.es" target="_blank" class="underline hover:text-white">www.casapapat.es</a></p>
@@ -262,32 +262,28 @@
     </div>
   </section>
 
-  <!-- ==================== GALERÍA INTERACTIVA (CON FOTOS DE CASA PAPAT) ==================== -->
+  <!-- ==================== GALERÍA INTERACTIVA ==================== -->
   <section id="galeria" class="py-16 px-6 max-w-7xl mx-auto w-full">
     <div class="text-center mb-12">
       <h2 class="text-3xl font-extrabold text-white">Galería Destacada de Clientes</h2>
       <p class="text-slate-400 text-sm mt-2">Haz clic para ver en detalle las creaciones de Casa Papat y colaboradores.</p>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <!-- Foto Casa Papat 1 -->
-      <div @click="modalLightbox = true; imgActual = 'WhatsApp Image 2026-10-22 at 6.26.24 AM (2).jpeg'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
-        <img src="WhatsApp Image 2026-10-22 at 6.26.24 AM (2).jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
         <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
       </div>
-      <!-- Foto Casa Papat 2 -->
-      <div @click="modalLightbox = true; imgActual = 'WhatsApp Image 2026-10-22 at 6.26.25 AM.jpeg'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
-        <img src="WhatsApp Image 2026-10-22 at 6.26.25 AM.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
+      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Galadriel Concept'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Galadriel</div>
       </div>
-      <!-- Foto Casa Papat 3 -->
-      <div @click="modalLightbox = true; imgActual = 'WhatsApp Image 2026-10-22 at 6.26.25 AM (1).jpeg'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
-        <img src="WhatsApp Image 2026-10-22 at 6.26.25 AM (1).jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
+      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Jda Social Media'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
+        <img src="https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Jda Social</div>
       </div>
-      <!-- Foto Casa Papat 4 -->
-      <div @click="modalLightbox = true; imgActual = 'WhatsApp Image 2026-10-22 at 6.26.26 AM.jpeg'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
-        <img src="WhatsApp Image 2026-10-22 at 6.26.26 AM.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
+      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Puerto Dénia'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
+        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Puerto Dénia</div>
       </div>
     </div>
   </section>
@@ -409,8 +405,8 @@
         place: 'Gastronomía Dénia',
         title: 'PIZZAS Y',
         title2: 'PASTAS',
-        description: 'Pizzas artesanales al horno de leña, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat. El punto de referencia gastronómico en Dénia.',
-        image: 'WhatsApp Image 2026-10-22 at 6.26.24 AM (2).jpeg'
+        description: 'Pizzas artesanales, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat. El punto de referencia gastronómico en Dénia.',
+        image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=2752&q=80'
       },
       {
         place: 'Casco Histórico',
