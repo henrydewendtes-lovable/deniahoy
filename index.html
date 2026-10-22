@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Denia Hoy - Guía Interactiva de Restaurantes</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
-    /* Fondo animado dinámico con tonos del Mediterráneo y atardecer */
+    /* Fondo animado dinámico con tonos del Mediterráneo */
     body {
-      background: linear-gradient(-45deg, #0f172a, #1e1b4b, #0f766e, #0284c7);
+      background: linear-gradient(-45deg, #090d16, #111827, #0f766e, #0369a1);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
+      overflow-x: hidden;
     }
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
@@ -19,71 +22,161 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Efecto Glassmorphism (Vidrio Opaco) con sombras brillantes */
+    /* Efecto Glassmorphism avanzado con brillo */
     .glass-card {
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      transition: all 0.4s ease;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .glass-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      border-color: rgba(56, 189, 248, 0.5);
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+      transform: translateY(-10px) scale(1.02);
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.35);
+    }
+
+    .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
   </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col items-center justify-center p-6">
+<body class="text-slate-100 min-h-screen flex flex-col">
 
-  <!-- Header Hero -->
-  <header class="text-center max-w-3xl mb-12">
-    <span class="px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide bg-sky-500/20 text-sky-300 border border-sky-500/30 backdrop-blur-md uppercase mb-4 inline-block">
-      Descubre la Gastronomía en Dénia
+  <!-- Menú de Navegación Flotante Moderno -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav px-6 py-4 flex items-center justify-between max-w-7xl mx-auto md:rounded-b-2xl md:mt-2 shadow-2xl">
+    <div class="flex items-center space-x-2">
+      <span class="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-teal-300">
+        Denia<span class="text-white">Hoy</span>
+      </span>
+    </div>
+    <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+      <a href="#restaurantes" class="hover:text-sky-400 transition-colors">Restaurantes</a>
+      <a href="#planes" class="hover:text-sky-400 transition-colors">Planes Comercios</a>
+      <a href="#ia-chat" class="hover:text-sky-400 transition-colors">Asistente IA</a>
+    </div>
+    <div>
+      <a href="#planes" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-teal-500 text-white font-semibold text-xs tracking-wider uppercase shadow-lg shadow-sky-500/20 hover:shadow-sky-500/40 hover:scale-105 transition-all">
+        Suma tu Negocio
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="pt-36 pb-16 px-6 text-center max-w-4xl mx-auto flex flex-col items-center">
+    <span data-aos="fade-down" class="px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide bg-sky-500/20 text-sky-300 border border-sky-500/30 backdrop-blur-md uppercase mb-6 inline-block">
+      ✨ La Guía Definitiva de Dénia
     </span>
-    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-sky-200 to-sky-400 mb-4">
-      Denia Hoy
+    <h1 data-aos="fade-up" data-aos-delay="100" class="text-4xl md:text-7xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-sky-200 to-teal-300 mb-6 leading-tight">
+      Encuentra todo lo que buscas en Dénia
     </h1>
-    <p class="text-slate-300 text-lg">
-      La guía interactiva para encontrar los mejores restaurantes, ofertas exclusivas y experiencias únicas en un solo lugar.
+    <p data-aos="fade-up" data-aos-delay="200" class="text-slate-300 text-lg md:text-xl max-w-2xl mb-10">
+      Restaurantes exclusivos, ofertas y planes únicos reunidos en un solo lugar gracias a nuestra tecnología inteligente.
     </p>
+
+    <!-- Buscador Interactivo -->
+    <div data-aos="fade-up" data-aos-delay="300" class="w-full max-w-2xl glass-card p-3 rounded-2xl flex flex-col md:flex-row gap-3">
+      <input type="text" placeholder="¿Qué te apetece hoy? (ej. Arroces, Tapas, Puerto...)" class="w-full bg-transparent px-4 py-3 text-white placeholder-slate-400 focus:outline-none text-sm">
+      <button class="px-8 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg transition-all text-sm">
+        Buscar
+      </button>
+    </div>
   </header>
 
-  <!-- Grid de Restaurantes -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full">
-    
-    <!-- Tarjeta de Restaurante (Ejemplo Plan VIP) -->
-    <div class="glass-card rounded-2xl overflow-hidden relative group">
-      <!-- Badge VIP -->
-      <span class="absolute top-4 right-4 z-10 bg-amber-500/80 backdrop-blur-md text-amber-950 text-xs font-bold px-3 py-1 rounded-full border border-amber-300/40 shadow-lg">
-        ⭐ Destacado VIP
-      </span>
-      
-      <!-- Imagen -->
-      <div class="h-48 overflow-hidden relative">
-        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Restaurante en Dénia" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+  <!-- Sección de Restaurantes -->
+  <section id="restaurantes" class="py-16 px-6 max-w-7xl mx-auto w-full">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h2 data-aos="fade-right" class="text-3xl font-extrabold text-white">Restaurantes Destacados</h2>
+        <p data-aos="fade-right" data-aos-delay="100" class="text-slate-400 text-sm mt-1">Los mejores locales recomendados por nuestros usuarios y la IA.</p>
       </div>
-
-      <!-- Contenido de la Ficha -->
-      <div class="p-6">
-        <h3 class="text-2xl font-bold text-white mb-2">Arrocería Puerto Dénia</h3>
-        <p class="text-slate-300 text-sm mb-4">Especialistas en arroces marineros y cocina mediterránea con vistas al puerto.</p>
-        
-        <div class="flex items-center justify-between text-xs text-sky-300 font-medium mb-6">
-          <span>📍 Puerto Deportivo</span>
-          <span>🍷 Menú del día disponible</span>
-        </div>
-
-        <button class="w-full py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-sky-500/25 transition-all">
-          Ver Carta y Reservar
-        </button>
-      </div>
+      <span class="text-sky-400 text-sm font-semibold cursor-pointer hover:underline hidden md:block">Ver todos (24) →</span>
     </div>
 
-  </div>
+    <!-- Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Tarjeta 1 (VIP) -->
+      <div data-aos="fade-up" data-aos-delay="100" class="glass-card rounded-2xl overflow-hidden relative group">
+        <span class="absolute top-4 right-4 z-10 bg-amber-500/90 backdrop-blur-md text-amber-950 text-xs font-bold px-3 py-1 rounded-full border border-amber-300/40 shadow-lg">
+          ⭐ VIP
+        </span>
+        <div class="h-52 overflow-hidden relative">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Restaurante" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold text-white mb-2">Arrocería Puerto Dénia</h3>
+          <p class="text-slate-300 text-sm mb-4">Especialistas en arroces marineros y cocina mediterránea con vistas al puerto.</p>
+          <div class="flex items-center justify-between text-xs text-sky-300 font-medium mb-6">
+            <span>📍 Puerto Deportivo</span>
+            <span>🍷 Menú del día</span>
+          </div>
+          <button class="w-full py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 text-white font-semibold rounded-xl shadow-lg transition-all">
+            Ver Carta y Reservar
+          </button>
+        </div>
+      </div>
 
+      <!-- Tarjeta 2 (Oro) -->
+      <div data-aos="fade-up" data-aos-delay="200" class="glass-card rounded-2xl overflow-hidden relative group">
+        <span class="absolute top-4 right-4 z-10 bg-sky-400/90 backdrop-blur-md text-slate-950 text-xs font-bold px-3 py-1 rounded-full border border-sky-200/40 shadow-lg">
+          💎 Plan Oro
+        </span>
+        <div class="h-52 overflow-hidden relative">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" alt="Restaurante" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold text-white mb-2">Tasca El Xiquet</h3>
+          <p class="text-slate-300 text-sm mb-4">Tapas creativas, producto fresco de lonja y excelente selección de vinos locales.</p>
+          <div class="flex items-center justify-between text-xs text-sky-300 font-medium mb-6">
+            <span>📍 Calle Marqués de Campo</span>
+            <span>⭐ Tapas Top</span>
+          </div>
+          <button class="w-full py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 text-white font-semibold rounded-xl shadow-lg transition-all">
+            Ver Ficha y Ofertas
+          </button>
+        </div>
+      </div>
+
+      <!-- Tarjeta 3 (Gratis) -->
+      <div data-aos="fade-up" data-aos-delay="300" class="glass-card rounded-2xl overflow-hidden relative group">
+        <span class="absolute top-4 right-4 z-10 bg-slate-700/80 backdrop-blur-md text-slate-300 text-xs font-semibold px-3 py-1 rounded-full border border-slate-600 shadow-lg">
+          📌 Básico
+        </span>
+        <div class="h-52 overflow-hidden relative">
+          <img src="https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=600&q=80" alt="Restaurante" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold text-white mb-2">Pizzería Bella Dénia</h3>
+          <p class="text-slate-300 text-sm mb-4">Pizzas artesanales al horno de leña y pasta fresca casera tradicional.</p>
+          <div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-6">
+            <span>📍 Zona Les Marines</span>
+            <span>🍕 Horno de leña</span>
+          </div>
+          <button class="w-full py-3 bg-slate-800/80 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-600 transition-all">
+            Ver Información
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Script para las animaciones al hacer Scroll (AOS) -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+  </script>
 </body>
 </html>
