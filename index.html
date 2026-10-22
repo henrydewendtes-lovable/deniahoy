@@ -14,23 +14,13 @@
 
   <style>
     body {
-      background: #050b14;
+      background: linear-gradient(135deg, #050b14 0%, #0d233a 50%, #050b14 100%);
+      background-attachment: fixed;
       color: #f8fafc;
       font-family: ui-sans-serif, system-ui, sans-serif;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
-    }
-
-    /* Fondo animado interactivo de partículas */
-    #bg-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      pointer-events: none;
     }
 
     .glass-card {
@@ -47,7 +37,7 @@
       box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
     }
     .glass-nav {
-      background: rgba(5, 11, 20, 0.85);
+      background: rgba(5, 11, 20, 0.9);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -55,9 +45,6 @@
   </style>
 </head>
 <body x-data="{ modalRegistro: false, modalLightbox: false, imgActual: '', empresaActual: '' }" class="min-h-screen flex flex-col">
-
-  <!-- Fondo de Partículas Fluidas -->
-  <canvas id="bg-canvas"></canvas>
 
   <!-- ==================== MENÚ DE NAVEGACIÓN ==================== -->
   <nav class="fixed top-0 left-0 right-0 z-50 glass-nav px-6 py-4">
@@ -271,9 +258,4 @@
 
   <!-- ==================== MODAL REGISTRO ==================== -->
   <div x-show="modalRegistro" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-    <div class="glass-card max-w-md w-full p-6 rounded-3xl relative">
-      <button @click="modalRegistro = false" class="absolute top-4 right-4 text-slate-300 hover:text-white">✕</button>
-      <h3 class="text-2xl font-bold text-white mb-2">Registra tu Comercio</h3>
-      <form @submit.prevent="alert('¡Registrado con éxito!'); modalRegistro = false" class="space-y-4 mt-4">
-        <input type="text" required placeholder="Nombre del Comercio" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white">
-        <input type="text" required placeholder="Dirección en Dénia" class="w-full bg
+    <div class="glass-card max-w-
