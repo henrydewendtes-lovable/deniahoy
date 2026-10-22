@@ -7,8 +7,6 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- AOS Animation Library CSS -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -37,7 +35,7 @@
       box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
     }
     .glass-nav {
-      background: rgba(5, 11, 20, 0.9);
+      background: rgba(5, 11, 20, 0.95);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -80,17 +78,17 @@
 
   <!-- ==================== HERO SECTION ==================== -->
   <header class="pt-40 pb-20 px-6 text-center max-w-4xl mx-auto flex flex-col items-center">
-    <span data-aos="fade-down" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 uppercase mb-6 inline-block">
+    <span class="px-4 py-1.5 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 uppercase mb-6 inline-block">
       ✨ Portal Oficial e Interactivo de Dénia
     </span>
-    <h1 data-aos="fade-up" class="text-4xl md:text-7xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-sky-100 to-teal-300 mb-6 leading-tight">
+    <h1 class="text-4xl md:text-7xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-sky-100 to-teal-300 mb-6 leading-tight">
       Todo lo que buscas en Dénia en un solo lugar
     </h1>
-    <p data-aos="fade-up" class="text-slate-200 text-lg md:text-xl max-w-2xl mb-10">
+    <p class="text-slate-200 text-lg md:text-xl max-w-2xl mb-10">
       Encuentra la mejor gastronomía, eventos de la ciudad, ofertas y comercios locales recomendados.
     </p>
 
-    <div data-aos="fade-up" class="w-full max-w-2xl glass-card p-3 rounded-2xl flex flex-col md:flex-row gap-3">
+    <div class="w-full max-w-2xl glass-card p-3 rounded-2xl flex flex-col md:flex-row gap-3">
       <input type="text" placeholder="¿Qué buscas hoy? (ej. Pizzería, Feria, Ferry...)" class="w-full bg-transparent px-4 py-3 text-white placeholder-slate-300 focus:outline-none text-sm">
       <button class="px-8 py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl shadow-lg text-sm">
         Buscar
@@ -100,7 +98,7 @@
 
   <!-- ==================== TARJETAS DESTACADAS ==================== -->
   <section id="destacados" class="py-16 px-6 max-w-7xl mx-auto w-full">
-    <div class="text-center mb-12" data-aos="fade-up">
+    <div class="text-center mb-12">
       <h2 class="text-3xl font-extrabold text-white">Destacados de Dénia Hoy</h2>
       <p class="text-slate-300 text-sm mt-2">Gastronomía recomendada, eventos y servicios imprescindibles.</p>
     </div>
@@ -108,7 +106,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       
       <!-- Ficha 1: Pizzería Casa Papat -->
-      <div data-aos="fade-up" class="glass-card rounded-2xl overflow-hidden relative group">
+      <div class="glass-card rounded-2xl overflow-hidden relative group">
         <span class="absolute top-4 right-4 z-10 bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full shadow-lg">⭐ 4.8 / 5</span>
         <div class="h-56 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80" alt="Casa Papat" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
@@ -122,7 +120,7 @@
       </div>
 
       <!-- Ficha 2: Feria de Dénia -->
-      <div data-aos="fade-up" class="glass-card rounded-2xl overflow-hidden relative group">
+      <div class="glass-card rounded-2xl overflow-hidden relative group">
         <span class="absolute top-4 right-4 z-10 bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">🎉 Evento</span>
         <div class="h-56 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80" alt="Feria" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
@@ -136,7 +134,7 @@
       </div>
 
       <!-- Ficha 3: Baleària -->
-      <div data-aos="fade-up" class="glass-card rounded-2xl overflow-hidden relative group">
+      <div class="glass-card rounded-2xl overflow-hidden relative group">
         <span class="absolute top-4 right-4 z-10 bg-teal-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg">🚢 Puerto</span>
         <div class="h-56 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80" alt="Baleària" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
@@ -153,7 +151,7 @@
   </section>
 
   <!-- ==================== BANNER PUBLICITARIO ==================== -->
-  <section class="py-6 px-6 max-w-7xl mx-auto w-full" data-aos="zoom-in">
+  <section class="py-6 px-6 max-w-7xl mx-auto w-full">
     <div class="glass-card rounded-2xl p-8 text-center border-amber-500/30">
       <span class="text-xs uppercase font-bold text-amber-400 mb-2 inline-block">Espacio Publicitario</span>
       <h3 class="text-2xl font-extrabold text-white mb-3">¿Quieres que tu comercio aparezca aquí?</h3>
@@ -163,99 +161,14 @@
 
   <!-- ==================== GALERÍA ==================== -->
   <section id="galeria" class="py-16 px-6 max-w-7xl mx-auto w-full">
-    <div class="text-center mb-12" data-aos="fade-up">
+    <div class="text-center mb-12">
       <h2 class="text-3xl font-extrabold text-white">Galería Interactiva</h2>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group" data-aos="fade-up">
+      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
         <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
         <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
       </div>
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Galadriel Concept'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group" data-aos="fade-up" data-aos-delay="100">
+      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Galadriel Concept'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
         <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Galadriel</div>
-      </div>
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Jda Social Media'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group" data-aos="fade-up" data-aos-delay="200">
-        <img src="https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Jda Social</div>
-      </div>
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Puerto Dénia'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group" data-aos="fade-up" data-aos-delay="300">
-        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Puerto Dénia</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== PLANES ==================== -->
-  <section id="planes" class="py-20 px-6 max-w-7xl mx-auto w-full">
-    <div class="text-center mb-16" data-aos="fade-up">
-      <h2 class="text-3xl md:text-5xl font-black text-white">Planes para Comercios</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between" data-aos="fade-up">
-        <div>
-          <h3 class="text-2xl font-bold text-white mb-2">Gratuito</h3>
-          <p class="text-3xl font-black text-white mb-6">0€</p>
-          <ul class="space-y-3 text-sm text-slate-200 mb-8">
-            <li>✅ 1 Foto principal</li>
-            <li>✅ Nombre, dirección y teléfono</li>
-          </ul>
-        </div>
-        <button @click="modalRegistro = true" class="w-full py-3 bg-slate-800 text-white font-bold rounded-xl border border-slate-700">Elegir Gratis</button>
-      </div>
-
-      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border-sky-500/50" data-aos="fade-up" data-aos-delay="100">
-        <div>
-          <h3 class="text-2xl font-bold text-white mb-2">Plan Oro</h3>
-          <p class="text-3xl font-black text-white mb-6">19€ <span class="text-sm font-normal text-slate-300">/mes</span></p>
-          <ul class="space-y-3 text-sm text-slate-200 mb-8">
-            <li>✅ Galería 5 fotos</li>
-            <li>✅ Enlaces a Web y WhatsApp</li>
-            <li>✅ Ofertas mensuales</li>
-          </ul>
-        </div>
-        <button class="w-full py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl">Contratar Oro</button>
-      </div>
-
-      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border-amber-500/50" data-aos="fade-up" data-aos-delay="200">
-        <div>
-          <h3 class="text-2xl font-bold text-white mb-2">Plan VIP</h3>
-          <p class="text-3xl font-black text-white mb-6">39€ <span class="text-sm font-normal text-slate-300">/mes</span></p>
-          <ul class="space-y-3 text-sm text-slate-200 mb-8">
-            <li>✅ Banner en Inicio</li>
-            <li>✅ IA recomendada</li>
-            <li>✅ Reseñas de Google</li>
-          </ul>
-        </div>
-        <button class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl">Contratar VIP</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== MAPA ==================== -->
-  <section id="mapa" class="py-16 px-6 max-w-7xl mx-auto w-full" data-aos="fade-up">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-extrabold text-white">Mapa Interactivo</h2>
-    </div>
-    <div class="glass-card rounded-3xl p-4 h-96">
-      <iframe class="w-full h-full rounded-2xl" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12484.512399042253!2d0.1018318!3d38.8407887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x129e1b2184ff5f4d%3A0x400c5082ca315c0!2sD%C3%A9nia%2C%20Alicante!5e0!3m2!1ses!2ses!4v1700000000000" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    </div>
-  </section>
-
-  <!-- ==================== PATROCINADORES ==================== -->
-  <section class="py-12 px-6 max-w-7xl mx-auto w-full border-t border-slate-800 text-center" data-aos="fade-up">
-    <p class="text-xs uppercase font-bold tracking-widest text-slate-300 mb-6">Patrocinadores Oficiales</p>
-    <div class="flex flex-wrap items-center justify-center gap-8 md:gap-16 text-slate-200 font-black">
-      <span>GALADRIEL CONCEPT</span>
-      <span>JDA SOCIAL MEDIA</span>
-      <span>PIZZERÍA CASA PAPAT</span>
-    </div>
-  </section>
-
-  <footer id="contacto" class="py-8 px-6 glass-nav text-center text-xs text-slate-300 mt-auto">
-    <p>© 2026 Denia Hoy. Todos los derechos reservados.</p>
-  </footer>
-
-  <!-- ==================== MODAL REGISTRO ==================== -->
-  <div x-show="modalRegistro" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-    <div class="glass-card max-w-
+        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-9
