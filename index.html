@@ -3,47 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Denia Hoy - Guía Interactiva y Directorio de Dénia</title>
+  <title>Denia Hoy — Guía Interactiva y Directorio de Dénia</title>
+  
+  <!-- Fuentes Google Fonts (Inter & Oswald) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- AOS Animation Library CSS -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
   <style>
-    /* Fondo base con gradiente mediterráneo profundo */
     body {
-      background: #050b14;
-      color: #f8fafc;
-      font-family: ui-sans-serif, system-ui, sans-serif;
       margin: 0;
-      padding: 0;
+      background-color: #050b14;
+      color: #FFFFFFDD;
+      font-family: "Inter", sans-serif;
       overflow-x: hidden;
     }
 
-    /* Lienzo para el fondo animado interactivo */
-    #bg-canvas {
-      position: fixed;
-      top: 0;
+    .display-font {
+      font-family: "Oswald", sans-serif;
+      font-weight: 600;
+    }
+
+    /* Estilos del Carrusel Cinemático GSAP */
+    .card {
+      position: absolute;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      pointer-events: none;
+      top: 0;
+      background-position: center;
+      background-size: cover;
+      box-shadow: 6px 6px 20px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #FFFFFFDD;
+      padding-left: 16px;
+    }
+
+    .details {
+      position: absolute;
+      top: 220px;
+      left: 60px;
+      z-index: 22;
+      max-width: 500px;
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
       transition: all 0.4s ease;
     }
     .glass-card:hover {
       transform: translateY(-6px);
-      border-color: rgba(56, 189, 248, 0.8);
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
     }
     .glass-nav {
       background: rgba(5, 11, 20, 0.85);
@@ -55,202 +78,280 @@
 </head>
 <body x-data="{ modalRegistro: false, modalLightbox: false, imgActual: '', empresaActual: '' }" class="min-h-screen flex flex-col">
 
-  <!-- Fondo Interactivo Animado por Canvas (IA / Partículas fluidas) -->
-  <canvas id="bg-canvas"></canvas>
+  <!-- Barra de progreso superior del carrusel -->
+  <div class="indicator fixed top-0 left-0 right-0 h-[5px] bg-[#75AADB] z-[60] pointer-events-none"></div>
+  
+  <!-- Panel de transición inicial -->
+  <div class="cover fixed inset-0 bg-white z-[100] pointer-events-none"></div>
 
-  <!-- ==================== NAVEGACIÓN ==================== -->
-  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav px-6 py-4">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <a href="#" class="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-teal-300 to-amber-300">
-        Denia<span class="text-white">Hoy</span>
-      </a>
-
-      <div class="hidden lg:flex items-center space-x-8 text-sm font-medium text-slate-200">
-        <div class="relative" x-data="{ openCat: false }">
-          <button @click="openCat = !openCat" @click.outside="openCat = false" class="flex items-center space-x-1 hover:text-sky-400 transition-colors py-2">
-            <span>Categorías</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </button>
-          <div x-show="openCat" class="absolute top-full left-0 mt-2 w-56 glass-card rounded-2xl p-3 shadow-2xl z-50">
-            <a href="#destacados" class="block px-4 py-2 rounded-xl hover:bg-sky-500/20 text-sky-300 font-semibold">🍕 Restaurantes & Tapas</a>
-            <a href="#" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🛍️ Comercios & Tiendas</a>
-            <a href="#" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🏨 Alojamientos</a>
-            <a href="#" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🎉 Ocio y Eventos</a>
-          </div>
-        </div>
-        <a href="#planes" class="hover:text-sky-400">Planes</a>
-        <a href="#galeria" class="hover:text-sky-400">Galería</a>
-        <a href="#mapa" class="hover:text-sky-400">Mapa</a>
-        <a href="#contacto" class="hover:text-sky-400">Contacto</a>
+  <!-- ==================== MENÚ DE NAVEGACIÓN ==================== -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav px-8 py-4 flex items-center justify-between text-sm font-medium">
+    <div class="inline-flex items-center space-x-3 uppercase">
+      <div class="svg-container w-6 h-6 text-sky-400">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M18.5 12L22 12M17.63 8.75L20.66 7M15.25 6.37L17 3.34M12 5.5L12 2M8.75 6.37L7 3.34M6.37 8.75L3.34 7M5.5 12L2 12M6.37 15.25L3.34 17M8.75 17.63L7 20.66M12 18.5L12 22M15.25 17.63L17 20.66M17.63 15.25L20.66 17"/></svg>
       </div>
+      <span class="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-teal-300 to-amber-300">Denia Hoy</span>
+    </div>
 
-      <button @click="modalRegistro = true" class="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold text-xs uppercase shadow-lg hover:scale-105 transition-all">
+    <div class="hidden lg:flex items-center space-x-8">
+      <div class="relative" x-data="{ openCat: false }">
+        <button @click="openCat = !openCat" @click.outside="openCat = false" class="flex items-center space-x-1 hover:text-sky-400 transition-colors py-2">
+          <span>Categorías</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div x-show="openCat" class="absolute top-full left-0 mt-2 w-56 glass-card rounded-2xl p-3 shadow-2xl z-50 text-left">
+          <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-sky-500/20 text-sky-300 font-semibold">🍕 Restaurantes & Tapas</a>
+          <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🛍️ Comercios & Tiendas</a>
+          <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🏨 Alojamientos</a>
+          <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🎉 Ocio y Eventos</a>
+        </div>
+      </div>
+      <a href="#directorio" class="hover:text-sky-400">Directorio</a>
+      <a href="#planes" class="hover:text-sky-400">Planes</a>
+      <a href="#galeria" class="hover:text-sky-400">Galería</a>
+      <a href="#mapa" class="hover:text-sky-400">Mapa 3D</a>
+    </div>
+
+    <div>
+      <button @click="modalRegistro = true" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold text-xs uppercase shadow-lg hover:scale-105 transition-all">
         ➕ Registra tu Negocio
       </button>
     </div>
   </nav>
 
-  <!-- ==================== HERO SECTION ==================== -->
-  <header class="pt-40 pb-20 px-6 text-center max-w-4xl mx-auto flex flex-col items-center">
-    <span data-aos="fade-down" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 uppercase mb-6 inline-block">
-      ✨ Portal Oficial e Interactivo de Dénia
-    </span>
-    <h1 data-aos="fade-up" class="text-4xl md:text-7xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-sky-100 to-teal-300 mb-6 leading-tight">
-      Todo lo que buscas en Dénia en un solo lugar
-    </h1>
-    <p data-aos="fade-up" class="text-slate-200 text-lg md:text-xl max-w-2xl mb-10">
-      Encuentra la mejor gastronomía, eventos de la ciudad, ofertas y comercios locales recomendados.
-    </p>
+  <!-- ==================== SECCIÓN 1: HERO CARRUSEL CINEMATOGRÁFICO ==================== -->
+  <header class="relative w-full h-screen overflow-hidden" id="demo">
+    <!-- Paneles de detalles A/B alternantes -->
+    <div class="details" id="details-even">
+      <div class="place-box h-[46px] overflow-hidden relative">
+        <div class="text pt-4 text-xl relative pl-8 font-medium">
+          <div class="absolute top-0 left-0 w-[30px] h-[4px] rounded-full bg-white"></div>
+          <span>Gastronomía Dénia</span>
+        </div>
+      </div>
+      <div class="title-box-1 mt-1 h-[100px] overflow-hidden">
+        <div class="title-1 display-font text-[72px] leading-none">PIZZAS Y</div>
+      </div>
+      <div class="title-box-2 mt-1 h-[100px] overflow-hidden">
+        <div class="title-2 display-font text-[72px] leading-none">PASTAS</div>
+      </div>
+      <div class="desc mt-4 w-[500px] text-sm text-slate-300 leading-relaxed">
+        Pizzas artesanales al horno de leña, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat. El punto de referencia gastronómico en Dénia.
+      </div>
+      <div class="cta w-[500px] mt-6 flex items-center">
+        <a href="http://www.casapapat.es" target="_blank" class="w-[36px] h-[36px] rounded-full bg-[#75AADB] text-white grid place-items-center shadow-lg">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"/></svg>
+        </a>
+        <a href="http://www.casapapat.es" target="_blank" class="border border-white bg-transparent h-[36px] rounded-full text-white px-6 text-xs font-semibold uppercase ml-4 grid place-items-center hover:bg-white/10 transition-colors">
+          Visitar Casa Papat
+        </a>
+      </div>
+    </div>
 
-    <div data-aos="fade-up" class="w-full max-w-2xl glass-card p-3 rounded-2xl flex flex-col md:flex-row gap-3">
-      <input type="text" placeholder="¿Qué buscas hoy? (ej. Pizzería, Feria, Ferry...)" class="w-full bg-transparent px-4 py-3 text-white placeholder-slate-300 focus:outline-none text-sm">
-      <button class="px-8 py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl shadow-lg text-sm">
-        Buscar
-      </button>
+    <div class="details" id="details-odd" style="opacity: 0;">
+      <div class="place-box h-[46px] overflow-hidden relative">
+        <div class="text pt-4 text-xl relative pl-8 font-medium">
+          <div class="absolute top-0 left-0 w-[30px] h-[4px] rounded-full bg-white"></div>
+          <span>Gastronomía Dénia</span>
+        </div>
+      </div>
+      <div class="title-box-1 mt-1 h-[100px] overflow-hidden">
+        <div class="title-1 display-font text-[72px] leading-none">PIZZAS Y</div>
+      </div>
+      <div class="title-box-2 mt-1 h-[100px] overflow-hidden">
+        <div class="title-2 display-font text-[72px] leading-none">PASTAS</div>
+      </div>
+      <div class="desc mt-4 w-[500px] text-sm text-slate-300 leading-relaxed">
+        Pizzas artesanales al horno de leña, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat.
+      </div>
+      <div class="cta w-[500px] mt-6 flex items-center">
+        <a href="http://www.casapapat.es" target="_blank" class="w-[36px] h-[36px] rounded-full bg-[#75AADB] text-white grid place-items-center shadow-lg">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"/></svg>
+        </a>
+        <a href="http://www.casapapat.es" target="_blank" class="border border-white bg-transparent h-[36px] rounded-full text-white px-6 text-xs font-semibold uppercase ml-4 grid place-items-center hover:bg-white/10 transition-colors">
+          Visitar Casa Papat
+        </a>
+      </div>
+    </div>
+
+    <!-- HUD inferior derecho del carrusel -->
+    <div class="pagination absolute z-60 inline-flex items-center" id="pagination">
+      <div class="arrow arrow-left w-[50px] h-[50px] rounded-full border-2 border-white/40 grid place-items-center cursor-pointer hover:border-white transition-colors">
+        <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+      </div>
+      <div class="arrow arrow-right w-[50px] h-[50px] rounded-full border-2 border-white/40 grid place-items-center cursor-pointer hover:border-white transition-colors ml-5">
+        <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+      </div>
+      <div class="progress-sub-container ml-6 w-[500px] flex items-center">
+        <div class="progress-sub-background w-[500px] h-[3px] bg-white/20 relative">
+          <div class="progress-sub-foreground h-[3px] bg-[#75AADB] absolute left-0 top-0"></div>
+        </div>
+      </div>
+      <div class="slide-numbers w-[50px] h-[50px] overflow-hidden relative ml-4" id="slide-numbers"></div>
     </div>
   </header>
 
-  <!-- ==================== TARJETAS DESTACADAS ==================== -->
-  <section id="destacados" class="py-16 px-6 max-w-7xl mx-auto w-full">
-    <div class="text-center mb-12" data-aos="fade-up">
-      <h2 class="text-3xl font-extrabold text-white">Destacados de Dénia Hoy</h2>
-      <p class="text-slate-300 text-sm mt-2">Gastronomía recomendada, eventos y servicios imprescindibles.</p>
+  <!-- ==================== SECCIÓN 2: DIRECTORIO Y COMERCIOS (LO QUE HABÍAMOS CREADO) ==================== -->
+  <section id="directorio" class="py-20 px-6 max-w-7xl mx-auto w-full">
+    <div class="text-center mb-12">
+      <span class="text-xs uppercase font-bold text-sky-400 tracking-widest mb-2 inline-block">Directorio Local Inteligente</span>
+      <h2 class="text-3xl md:text-5xl font-black text-white">Comercios y Gastronomía en Dénia</h2>
+      <p class="text-slate-400 text-sm mt-2">Encuentra los mejores locales recomendados con reseñas reales de Google Maps.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      
-      <!-- Ficha 1: Casa Papat -->
-      <div data-aos="fade-up" class="glass-card rounded-2xl overflow-hidden relative group">
-        <span class="absolute top-4 right-4 z-10 bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full shadow-lg">⭐ Top</span>
-        <div class="h-56 overflow-hidden relative">
+      <!-- Ficha Casa Papat -->
+      <div class="glass-card rounded-2xl overflow-hidden relative group">
+        <span class="absolute top-4 right-4 z-10 bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full shadow-lg">⭐ 4.8 / 5 ⭐</span>
+        <div class="h-60 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80" alt="Casa Papat" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
         </div>
         <div class="p-6">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="text-xl font-bold text-white">Pizzería Casa Papat</h3>
-            <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-2 py-1 rounded">⭐ 4.8 / 5</span>
+          <h3 class="text-xl font-bold text-white mb-2">Pizzería Casa Papat</h3>
+          <p class="text-slate-300 text-sm mb-4">Pizzas y pastas artesanales al horno de leña con masa madre y productos italianos.</p>
+          <div class="text-xs text-sky-300 mb-6 space-y-1">
+            <p>📍 Dénia, Alicante</p>
+            <p>🌐 <a href="http://www.casapapat.es" target="_blank" class="underline hover:text-white">www.casapapat.es</a></p>
           </div>
-          <p class="text-slate-200 text-sm mb-4">Pizzas artesanales, masa madre fresca e ingredientes mediterráneos.</p>
-          <p class="text-xs text-sky-300 mb-6">🌐 <a href="http://www.casapapat.es" target="_blank" class="underline">www.casapapat.es</a></p>
-          <a href="http://www.casapapat.es" target="_blank" class="block text-center w-full py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl">Ver Carta</a>
+          <a href="http://www.casapapat.es" target="_blank" class="block text-center w-full py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl shadow-lg">Ver Carta y Reservar</a>
         </div>
       </div>
 
-      <!-- Ficha 2: Feria -->
-      <div data-aos="fade-up" class="glass-card rounded-2xl overflow-hidden relative group">
+      <!-- Ficha Feria de Dénia -->
+      <div class="glass-card rounded-2xl overflow-hidden relative group">
         <span class="absolute top-4 right-4 z-10 bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">🎉 Evento</span>
-        <div class="h-56 overflow-hidden relative">
+        <div class="h-60 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80" alt="Feria" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
         </div>
         <div class="p-6">
           <h3 class="text-xl font-bold text-white mb-2">Feria de Dénia</h3>
-          <p class="text-slate-200 text-sm mb-4">Atracciones, puestos gastronómicos y ambiente festivo familiar.</p>
-          <p class="text-xs text-amber-300 mb-6">📍 Explanada Torrecremada</p>
+          <p class="text-slate-300 text-sm mb-4">Atracciones, puestos gastronómicos y ambiente festivo familiar en Torrecremada.</p>
+          <div class="text-xs text-amber-300 mb-6 space-y-1">
+            <p>📍 Explanada Torrecremada</p>
+            <p>🗓️ Todo el mes</p>
+          </div>
           <button class="w-full py-3 bg-slate-800/80 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-600">Ver Programa</button>
         </div>
       </div>
 
-      <!-- Ficha 3: Baleària -->
-      <div data-aos="fade-up" class="glass-card rounded-2xl overflow-hidden relative group">
-        <span class="absolute top-4 right-4 z-10 bg-teal-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg">🚢 Puerto</span>
-        <div class="h-56 overflow-hidden relative">
+      <!-- Ficha Baleària -->
+      <div class="glass-card rounded-2xl overflow-hidden relative group">
+        <span class="absolute top-4 right-4 z-10 bg-teal-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg">🚢 Transporte</span>
+        <div class="h-60 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80" alt="Baleària" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
         </div>
         <div class="p-6">
           <h3 class="text-xl font-bold text-white mb-2">Baleària - Rutas</h3>
-          <p class="text-slate-200 text-sm mb-4">Conecta Dénia en ferry directo con Ibiza, Mallorca y Formentera.</p>
-          <p class="text-xs text-teal-300 mb-6">🏝️ Salidas diarias desde puerto</p>
-          <button class="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-600 text-white font-bold rounded-xl">Ver Trayectos</button>
+          <p class="text-slate-300 text-sm mb-4">Conecta Dénia en ferry directo con Ibiza, Mallorca y Formentera.</p>
+          <div class="text-xs text-teal-300 mb-6 space-y-1">
+            <p>📍 Estación Marítima</p>
+            <p>🏝️ Salidas diarias</p>
+          </div>
+          <button class="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-600 text-white font-bold rounded-xl shadow-lg">Consultar Trayectos</button>
         </div>
       </div>
-
     </div>
   </section>
 
   <!-- ==================== BANNER PUBLICITARIO ==================== -->
-  <section class="py-6 px-6 max-w-7xl mx-auto w-full" data-aos="zoom-in">
+  <section class="py-6 px-6 max-w-7xl mx-auto w-full">
     <div class="glass-card rounded-2xl p-8 text-center border-amber-500/30">
       <span class="text-xs uppercase font-bold text-amber-400 mb-2 inline-block">Espacio Publicitario</span>
-      <h3 class="text-2xl font-extrabold text-white mb-3">¿Quieres que tu comercio aparezca aquí?</h3>
-      <a href="#planes" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl inline-block mt-2">Anúnciate</a>
+      <h3 class="text-2xl font-extrabold text-white mb-3">¿Quieres que tu comercio aparezca en este banner principal?</h3>
+      <a href="#planes" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl inline-block mt-2">Anúnciate Aquí</a>
     </div>
   </section>
 
-  <!-- ==================== GALERÍA ==================== -->
+  <!-- ==================== GALERÍA INTERACTIVA (CON FOTOS DE CASA PAPAT) ==================== -->
   <section id="galeria" class="py-16 px-6 max-w-7xl mx-auto w-full">
-    <div class="text-center mb-12" data-aos="fade-up">
-      <h2 class="text-3xl font-extrabold text-white">Galería Interactiva</h2>
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-extrabold text-white">Galería Destacada de Clientes</h2>
+      <p class="text-slate-400 text-sm mt-2">Haz clic para ver en detalle las creaciones de Casa Papat y colaboradores.</p>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group" data-aos="fade-up">
-        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+      <!-- Foto Casa Papat 1 -->
+      <div @click="modalLightbox = true; imgActual = 'WhatsApp Image 2026-10-22 at 6.26.24 AM (2).jpeg'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
+        <img src="WhatsApp Image 2026-10-22 at 6.26.24 AM (2).jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
         <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
       </div>
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Galadriel Concept'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group" data-aos="fade-up" data-aos-delay="100">
-        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Galadriel</div>
+      <!-- Foto Casa Papat 2 -->
+      <div @click="modalLightbox = true; imgActual = 'WhatsApp Image 2026-10-22 at 6.26.25 AM.jpeg'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
+        <img src="WhatsApp Image 2026-10-22 at 6.26.25 AM.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
       </div>
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Jda Social Media'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group" data-aos="fade-up" data-aos-delay="200">
-        <img src="https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Jda Social</div>
+      <!-- Foto Casa Papat 3 -->
+      <div @click="modalLightbox = true; imgActual = 'WhatsApp Image 2026-10-22 at 6.26.25 AM (1).jpeg'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
+        <img src="WhatsApp Image 2026-10-22 at 6.26.25 AM (1).jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
       </div>
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Puerto Dénia'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group" data-aos="fade-up" data-aos-delay="300">
-        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Puerto Dénia</div>
+      <!-- Foto Casa Papat 4 -->
+      <div @click="modalLightbox = true; imgActual = 'WhatsApp Image 2026-10-22 at 6.26.26 AM.jpeg'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
+        <img src="WhatsApp Image 2026-10-22 at 6.26.26 AM.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== PLANES ==================== -->
+  <!-- ==================== PLANES DE MONETIZACIÓN ==================== -->
   <section id="planes" class="py-20 px-6 max-w-7xl mx-auto w-full">
-    <div class="text-center mb-16" data-aos="fade-up">
-      <h2 class="text-3xl md:text-5xl font-black text-white">Planes para Comercios</h2>
+    <div class="text-center mb-16">
+      <span class="text-xs uppercase font-bold text-sky-400 tracking-widest mb-2 inline-block">Planes de Publicación</span>
+      <h2 class="text-3xl md:text-5xl font-black text-white">Haz crecer tu negocio en Dénia</h2>
+      <p class="text-slate-400 text-sm mt-2 max-w-2xl mx-auto">Elige tu plan. Comienza gratis con tu ficha básica (nombre, foto, dirección y teléfono).</p>
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="100">
+      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border-slate-700">
         <div>
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-600 inline-block mb-4">Básico</span>
           <h3 class="text-2xl font-bold text-white mb-2">Gratuito</h3>
-          <p class="text-3xl font-black text-white mb-6">0€</p>
-          <ul class="space-y-3 text-sm text-slate-200 mb-8">
+          <p class="text-3xl font-black text-white mb-6">0€ <span class="text-sm font-normal text-slate-400">/ siempre</span></p>
+          <ul class="space-y-3 text-sm text-slate-300 mb-8">
             <li>✅ 1 Foto principal</li>
-            <li>✅ Nombre, dirección y teléfono</li>
+            <li>✅ Nombre y dirección</li>
+            <li>✅ Teléfono de contacto</li>
           </ul>
         </div>
-        <button @click="modalRegistro = true" class="w-full py-3 bg-slate-800 text-white font-bold rounded-xl border border-slate-700">Elegir Gratis</button>
+        <button @click="modalRegistro = true" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl border border-slate-600">Crear Ficha Gratis</button>
       </div>
 
-      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border-sky-500/50" data-aos="fade-up" data-aos-delay="200">
+      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border-sky-500/50 relative">
+        <span class="absolute -top-3 right-6 bg-sky-500 text-slate-950 font-black text-xs px-3 py-1 rounded-full shadow-lg">RECOMENDADO</span>
         <div>
-          <h3 class="text-2xl font-bold text-white mb-2">Plan Oro</h3>
-          <p class="text-3xl font-black text-white mb-6">19€ <span class="text-sm font-normal text-slate-300">/mes</span></p>
-          <ul class="space-y-3 text-sm text-slate-200 mb-8">
-            <li>✅ Galería 5 fotos</li>
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 inline-block mb-4">Plan Oro</span>
+          <h3 class="text-2xl font-bold text-white mb-2">Destacado</h3>
+          <p class="text-3xl font-black text-white mb-6">19€ <span class="text-sm font-normal text-slate-400">/ mes</span></p>
+          <ul class="space-y-3 text-sm text-slate-300 mb-8">
+            <li>✅ Todo lo del Plan Gratis</li>
+            <li>✅ Galería de 5 fotos</li>
             <li>✅ Enlaces a Web y WhatsApp</li>
-            <li>✅ Ofertas mensuales</li>
+            <li>✅ 2 Ofertas mensuales</li>
           </ul>
         </div>
-        <button class="w-full py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl">Contratar Oro</button>
+        <button class="w-full py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl shadow-lg">Contratar Plan Oro</button>
       </div>
 
-      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border-amber-500/50" data-aos="fade-up" data-aos-delay="300">
+      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border-amber-500/50">
         <div>
-          <h3 class="text-2xl font-bold text-white mb-2">Plan VIP</h3>
-          <p class="text-3xl font-black text-white mb-6">39€ <span class="text-sm font-normal text-slate-300">/mes</span></p>
-          <ul class="space-y-3 text-sm text-slate-200 mb-8">
-            <li>✅ Banner en Inicio</li>
-            <li>✅ IA recomendada</li>
-            <li>✅ Reseñas de Google</li>
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 inline-block mb-4">Plan VIP</span>
+          <h3 class="text-2xl font-bold text-white mb-2">Máxima Exposición</h3>
+          <p class="text-3xl font-black text-white mb-6">39€ <span class="text-sm font-normal text-slate-400">/ mes</span></p>
+          <ul class="space-y-3 text-sm text-slate-300 mb-8">
+            <li>✅ Todo lo del Plan Oro</li>
+            <li>✅ Banner en Inicio y Galería</li>
+            <li>✅ Reseñas Google en tiempo real</li>
           </ul>
         </div>
-        <button class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl">Contratar VIP</button>
+        <button class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl shadow-lg">Contratar Plan VIP</button>
       </div>
     </div>
   </section>
 
-  <!-- ==================== MAPA ==================== -->
-  <section id="mapa" class="py-16 px-6 max-w-7xl mx-auto w-full" data-aos="fade-up">
+  <!-- ==================== MAPA 3D ==================== -->
+  <section id="mapa" class="py-16 px-6 max-w-7xl mx-auto w-full">
     <div class="text-center mb-10">
-      <h2 class="text-3xl font-extrabold text-white">Mapa Interactivo</h2>
+      <h2 class="text-3xl font-extrabold text-white">Mapa Interactivo 3D de Dénia</h2>
+      <p class="text-slate-400 text-sm mt-1">Ubicación exacta de comercios afiliados y valoraciones en tiempo real.</p>
     </div>
     <div class="glass-card rounded-3xl p-4 h-96">
       <iframe class="w-full h-full rounded-2xl" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12484.512399042253!2d0.1018318!3d38.8407887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x129e1b2184ff5f4d%3A0x400c5082ca315c0!2sD%C3%A9nia%2C%20Alicante!5e0!3m2!1ses!2ses!4v1700000000000" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
@@ -258,8 +359,8 @@
   </section>
 
   <!-- ==================== PATROCINADORES ==================== -->
-  <section class="py-12 px-6 max-w-7xl mx-auto w-full border-t border-slate-800 text-center" data-aos="fade-up">
-    <p class="text-xs uppercase font-bold tracking-widest text-slate-300 mb-6">Patrocinadores Oficiales</p>
+  <section class="py-12 px-6 max-w-7xl mx-auto w-full border-t border-slate-800 text-center">
+    <p class="text-xs uppercase font-bold tracking-widest text-slate-400 mb-6">Patrocinadores Oficiales</p>
     <div class="flex flex-wrap items-center justify-center gap-8 md:gap-16 text-slate-200 font-black">
       <span>GALADRIEL CONCEPT</span>
       <span>JDA SOCIAL MEDIA</span>
@@ -267,21 +368,21 @@
     </div>
   </section>
 
-  <footer id="contacto" class="py-8 px-6 glass-nav text-center text-xs text-slate-300 mt-auto">
-    <p>© 2026 Denia Hoy. Todos los derechos reservados.</p>
+  <footer class="py-8 px-6 glass-nav text-center text-xs text-slate-400 mt-auto">
+    <p>© 2026 Denia Hoy. Todos los derechos reservados. Impulsado con IA para Dénia.</p>
   </footer>
 
-  <!-- ==================== MODAL REGISTRO ==================== -->
+  <!-- ==================== MODAL REGISTRO GRATIS ==================== -->
   <div x-show="modalRegistro" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
     <div class="glass-card max-w-md w-full p-6 rounded-3xl relative">
-      <button @click="modalRegistro = false" class="absolute top-4 right-4 text-slate-300 hover:text-white">✕</button>
-      <h3 class="text-2xl font-bold text-white mb-2">Registra tu Comercio</h3>
-      <form @submit.prevent="alert('¡Registrado con éxito!'); modalRegistro = false" class="space-y-4 mt-4">
-        <input type="text" required placeholder="Nombre del Comercio" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white">
-        <input type="text" required placeholder="Dirección en Dénia" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white">
-        <input type="tel" required placeholder="Teléfono" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white">
-        <input type="file" required class="w-full text-xs text-slate-300">
-        <button type="submit" class="w-full py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl">Guardar Ficha</button>
+      <button @click="modalRegistro = false" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+      <h3 class="text-2xl font-bold text-white mb-2">Registra tu Comercio Gratis</h3>
+      <form @submit.prevent="alert('¡Ficha registrada con éxito!'); modalRegistro = false" class="space-y-4 mt-4">
+        <input type="text" required placeholder="Nombre del Comercio" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white text-sm">
+        <input type="text" required placeholder="Dirección en Dénia" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white text-sm">
+        <input type="tel" required placeholder="Teléfono" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white text-sm">
+        <input type="file" required class="w-full text-xs text-slate-400">
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl text-sm">Guardar y Publicar Ficha</button>
       </form>
     </div>
   </div>
@@ -293,85 +394,300 @@
       <div class="glass-card rounded-2xl p-2 text-center">
         <img :src="imgActual" class="w-full max-h-[70vh] object-contain rounded-xl">
         <p class="text-sm font-bold text-sky-300 mt-3" x-text="empresaActual"></p>
+        <p class="text-xs text-slate-400">Publicado en Denia Hoy</p>
       </div>
     </div>
   </div>
 
-  <!-- SCRIPT PARA EL FONDO ANIMADO INTERACTIVO CON SCROLL -->
+  <!-- GSAP 3 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <!-- MOTOR GSAP DEL CARRUSEL DE ATRACTIVOS DE DÉNIA -->
   <script>
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
+    const data = [
+      {
+        place: 'Gastronomía Dénia',
+        title: 'PIZZAS Y',
+        title2: 'PASTAS',
+        description: 'Pizzas artesanales al horno de leña, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat. El punto de referencia gastronómico en Dénia.',
+        image: 'WhatsApp Image 2026-10-22 at 6.26.24 AM (2).jpeg'
+      },
+      {
+        place: 'Casco Histórico',
+        title: 'EL',
+        title2: 'CASTILLO',
+        description: 'Fortaleza del siglo XI situada en el corazón de la ciudad, con un museo arqueológico y vistas panorámicas inigualables al mar Mediterráneo y al puerto.',
+        image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=2752&q=80'
+      },
+      {
+        place: 'Naturaleza & Calas',
+        title: 'PARQUE',
+        title2: 'DEL MONTGÓ',
+        description: 'Macizo montañoso que se adentra en el mar formando los acantilados de Las Rotas, un paraíso protegido de aguas cristalinas y reservas marinas.',
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2752&q=80'
+      },
+      {
+        place: 'Playas Dénia',
+        title: 'ARENAS',
+        title2: 'DE LA MARINA',
+        description: 'Kilómetros de playas de arena fina y aguas poco profundas en Les Marines, ideales para disfrutar en familia y deportes náuticos.',
+        image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=2752&q=80'
+      },
+      {
+        place: 'Conexión Islas',
+        title: 'PUERTO',
+        title2: 'Y BALEÀRIA',
+        description: 'El puerto neurálgico de Dénia con conexiones directas en ferry con Ibiza, Formentera y Mallorca operadas por Baleària.',
+        image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2752&q=80'
+      },
+      {
+        place: 'Ocio y Tradición',
+        title: 'FERIA',
+        title2: 'DE DÉNIA',
+        description: 'Eventos populares, atracciones, música y ambiente festivo en la Explanada de Torrecremada durante todo el año.',
+        image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=2752&q=80'
+      }
+    ];
 
-    let width, height;
-    let particles = [];
-    let scrollOffset = 0;
+    let order = [0, 1, 2, 3, 4, 5];
+    let detailsEven = true;
+    let offsetTop = 200;
+    let offsetLeft = 700;
+    let cardWidth = 200;
+    let cardHeight = 300;
+    let gap = 40;
+    let numberSize = 50;
+    const ease = "sine.inOut";
+    const _ = (id) => document.getElementById(id);
+    const set = gsap.set;
 
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    let transitioning = false;
+    let pendingRelayout = false;
+    let clicks = 0;
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
     }
 
-    window.addEventListener('resize', resize);
-    resize();
-
-    window.addEventListener('scroll', () => {
-      scrollOffset = window.pageYOffset * 0.15;
-    });
-
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = Math.random() * 3 + 1;
-        this.speedX = (Math.random() - 0.5) * 0.8;
-        this.speedY = (Math.random() - 0.5) * 0.8 - 0.3;
-        this.color = Math.random() > 0.5 ? 'rgba(56, 189, 248, 0.4)' : 'rgba(245, 158, 11, 0.3)';
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-          this.reset();
-        }
-      }
-      draw() {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y - (scrollOffset % height), this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    async function loadImages() {
+      return Promise.all(data.map(({ image }) => loadImage(image)));
     }
 
-    for (let i = 0; i < 70; i++) {
-      particles.push(new Particle());
+    function getCard(index) { return document.getElementById(`card${index}`); }
+    function getCardContent(index) { return document.getElementById(`card-content-${index}`); }
+
+    async function animate(target, duration, properties) {
+      return new Promise((resolve) => gsap.to(target, { ...properties, duration, onComplete: resolve }));
     }
 
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      
-      // Gradiente dinámico de fondo
-      let gradient = ctx.createLinearGradient(0, 0, width, height);
-      gradient.addColorStop(0, '#050b14');
-      gradient.addColorStop(0.5, '#0d5c75');
-      gradient.addColorStop(1, '#091833');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, height);
+    async function loop() {
+      await animate(".indicator", 2, { x: 0 });
+      await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
+      set(".indicator", { x: -window.innerWidth });
+      await step();
+      loop();
+    }
 
-      particles.forEach(p => {
-        p.update();
-        p.draw();
+    function step() {
+      return new Promise((resolve) => {
+        transitioning = true;
+        order.push(order.shift());
+        detailsEven = !detailsEven;
+
+        const detailsActive = detailsEven ? "#details-even" : "#details-odd";
+        const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
+
+        const currentData = data[order[0]];
+        document.querySelector(`${detailsActive} .place-box .text span`).textContent = currentData.place;
+        document.querySelector(`${detailsActive} .title-1`).textContent = currentData.title;
+        document.querySelector(`${detailsActive} .title-2`).textContent = currentData.title2;
+        document.querySelector(`${detailsActive} .desc`).textContent = currentData.description;
+
+        const [active, ...rest] = order;
+        const prv = rest[rest.length - 1];
+
+        set(getCard(prv), { zIndex: 10 });
+        set(getCard(active), { zIndex: 20 });
+        gsap.to(getCard(prv), { scale: 1.5, ease });
+
+        gsap.to(getCardContent(active), { y: offsetTop + cardHeight - 10, opacity: 0, duration: 0.3, ease });
+
+        gsap.to(getCard(active), {
+          x: 0,
+          y: 0,
+          width: "100vw",
+          height: "100vh",
+          borderRadius: 0,
+          ease,
+          onComplete: () => {
+            const xNew = offsetLeft + (rest.length - 1) * (cardWidth + gap);
+            set(getCard(prv), {
+              x: xNew,
+              y: offsetTop,
+              width: cardWidth,
+              height: cardHeight,
+              zIndex: 30,
+              borderRadius: 10,
+              scale: 1
+            });
+            set(getCardContent(prv), {
+              x: xNew,
+              y: offsetTop + cardHeight - 100,
+              opacity: 1,
+              zIndex: 40
+            });
+            set(document.getElementById(`slide-item-${prv}`), { x: rest.length * numberSize });
+
+            set(detailsInactive, {
+              opacity: 0,
+              zIndex: 12
+            });
+            set(document.querySelector(`${detailsInactive} .text`), { y: 100 });
+            set(document.querySelector(`${detailsInactive} .title-1`), { y: 100 });
+            set(document.querySelector(`${detailsInactive} .title-2`), { y: 100 });
+            set(document.querySelector(`${detailsInactive} .desc`), { y: 50 });
+            set(document.querySelector(`${detailsInactive} .cta`), { y: 60 });
+
+            transitioning = false;
+            if (pendingRelayout) {
+              pendingRelayout = false;
+              relayout();
+            }
+
+            if (clicks > 0) {
+              clicks -= 1;
+              step();
+            }
+          }
+        });
+
+        rest.forEach((i, index) => {
+          if (i === prv) return;
+          set(getCard(i), { zIndex: 30 });
+          const x = offsetLeft + index * (cardWidth + gap);
+          gsap.to(getCard(i), { x, y: offsetTop, width: cardWidth, height: cardHeight, borderRadius: 10, ease, delay: 0.1 * (index + 1) });
+          gsap.to(getCardContent(i), { x, y: offsetTop + cardHeight - 100, opacity: 1, zIndex: 40, ease, delay: 0.1 * (index + 1) });
+          gsap.to(document.getElementById(`slide-item-${i}`), { x: index * numberSize, ease });
+        });
+
+        gsap.to(document.getElementById(`slide-item-${active}`), { x: -numberSize, ease });
+
+        gsap.to(".progress-sub-foreground", { width: 500 * (1 / order.length) * (active + 1), ease });
+
+        set(detailsActive, { zIndex: 22 });
+        gsap.to(detailsActive, { opacity: 1, delay: 0.4, ease });
+        gsap.to(document.querySelector(`${detailsActive} .text`), { y: 0, delay: 0.1, duration: 0.7, ease });
+        gsap.to(document.querySelector(`${detailsActive} .title-1`), { y: 0, delay: 0.15, duration: 0.7, ease });
+        gsap.to(document.querySelector(`${detailsActive} .title-2`), { y: 0, delay: 0.15, duration: 0.7, ease });
+        gsap.to(document.querySelector(`${detailsActive} .desc`), { y: 0, delay: 0.3, duration: 0.4, ease });
+        gsap.to(document.querySelector(`${detailsActive} .cta`), { y: 0, delay: 0.35, duration: 0.4, ease, onComplete: resolve });
+      });
+    }
+
+    function relayout() {
+      if (transitioning) {
+        pendingRelayout = true;
+        return;
+      }
+      const height = window.innerHeight;
+      const width = window.innerWidth;
+      offsetTop = height - 430;
+      offsetLeft = width - 830;
+
+      const [active, ...rest] = order;
+
+      set("#pagination", { top: offsetTop + 330, left: offsetLeft });
+      set(getCard(active), { x: 0, y: 0, width: "100vw", height: "100vh", borderRadius: 0, scale: 1 });
+      set(getCardContent(active), { x: 0, y: 0, opacity: 0 });
+
+      rest.forEach((i, index) => {
+        const x = offsetLeft + index * (cardWidth + gap);
+        set(getCard(i), { x, y: offsetTop, width: cardWidth, height: cardHeight, zIndex: 30, borderRadius: 10 });
+        set(getCardContent(i), { x, y: offsetTop + cardHeight - 100, opacity: 1, zIndex: 40 });
+        set(document.getElementById(`slide-item-${i}`), { x: index * numberSize });
       });
 
-      requestAnimationFrame(animate);
+      set(".cover", { x: width + 400 });
     }
 
-    animate();
-  </script>
+    function init() {
+      const [active, ...rest] = order;
+      const height = window.innerHeight;
+      const width = window.innerWidth;
+      offsetTop = height - 430;
+      offsetLeft = width - 830;
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init({ duration: 900, once: true });</script>
+      const cardsHtml = data.map((i, index) => `<div class="card" id="card${index}" style="background-image:url(${i.image})"></div>`).join('');
+      const contentsHtml = data.map((i, index) => `<div class="card-content" id="card-content-${index}"><div class="w-[30px] h-[5px] rounded-full bg-white"></div><div class="mt-[6px] text-[13px] font-medium">${i.place}</div><div class="display-font text-[20px]">${i.title}</div><div class="display-font text-[20px]">${i.title2}</div></div>`).join('');
+      _('demo').innerHTML = cardsHtml + contentsHtml;
+
+      _('slide-numbers').innerHTML = data.map((_, index) => `<div class="item absolute top-0 left-0 w-[50px] h-[50px] grid place-items-center text-white font-bold text-[32px]" id="slide-item-${index}" style="transform: translateX(${index * numberSize}px)">${index + 1}</div>`).join('');
+
+      set("#pagination", { top: offsetTop + 330, left: offsetLeft, y: 200, opacity: 0, zIndex: 60 });
+      set("nav", { y: -200, opacity: 0 });
+      set(getCard(active), { x: 0, y: 0, width: "100vw", height: "100vh" });
+      set(getCardContent(active), { x: 0, y: 0, opacity: 0 });
+      set("#details-even", { opacity: 0, zIndex: 22, x: -200 });
+      set("#details-odd", { opacity: 0, zIndex: 12 });
+      
+      ['#details-even', '#details-odd'].forEach(sel => {
+        set(document.querySelector(`${sel} .text`), { y: 100 });
+        set(document.querySelector(`${sel} .title-1`), { y: 100 });
+        set(document.querySelector(`${sel} .title-2`), { y: 100 });
+        set(document.querySelector(`${sel} .desc`), { y: 50 });
+        set(document.querySelector(`${sel} .cta`), { y: 60 });
+      });
+
+      set(".progress-sub-foreground", { width: 500 * (1 / order.length) * (active + 1) });
+      set(".indicator", { x: -window.innerWidth });
+
+      rest.forEach((i, index) => {
+        const xNew = offsetLeft + 400 + index * (cardWidth + gap);
+        set(getCard(i), { x: xNew, y: offsetTop, width: cardWidth, height: cardHeight, zIndex: 30, borderRadius: 10 });
+        set(getCardContent(i), { x: xNew, zIndex: 40, y: offsetTop + cardHeight - 100 });
+        set(document.getElementById(`slide-item-${i}`), { x: (index + 1) * numberSize });
+      });
+
+      const startDelay = 0.6;
+      rest.forEach((i, index) => {
+        const x = offsetLeft + index * (cardWidth + gap);
+        gsap.to(getCard(i), { x, ease, delay: startDelay });
+        gsap.to(getCardContent(i), { x, ease, delay: startDelay });
+      });
+
+      gsap.to("#pagination", { y: 0, opacity: 1, ease, delay: startDelay });
+      gsap.to("nav", { y: 0, opacity: 1, ease, delay: startDelay });
+      gsap.to("#details-even", { opacity: 1, x: 0, ease, delay: startDelay });
+
+      gsap.to(".cover", {
+        x: width + 400,
+        delay: 0.5,
+        ease,
+        onComplete: () => {
+          setTimeout(loop, 500);
+        }
+      });
+
+      let resizeTimer;
+      window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(relayout, 150); });
+      window.addEventListener("load", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(relayout, 150); });
+    }
+
+    async function start() {
+      try {
+        await loadImages();
+        init();
+      } catch (err) {
+        console.error("One or more images failed to load", err);
+      }
+    }
+
+    start();
+  </script>
 </body>
 </html>
