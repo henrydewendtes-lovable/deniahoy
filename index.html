@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Denia Hoy — Guía Interactiva y Directorio de Dénia</title>
   
+  <!-- Fuentes Google Fonts (Inter & Oswald) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Alpine.js -->
@@ -12,30 +17,59 @@
 
   <style>
     body {
-      background: linear-gradient(135deg, #050b14 0%, #0d233a 50%, #050b14 100%);
-      background-attachment: fixed;
-      color: #f8fafc;
-      font-family: ui-sans-serif, system-ui, sans-serif;
       margin: 0;
-      padding: 0;
+      background-color: #050b14;
+      color: #FFFFFFDD;
+      font-family: "Inter", sans-serif;
       overflow-x: hidden;
     }
 
+    .display-font {
+      font-family: "Oswald", sans-serif;
+      font-weight: 600;
+    }
+
+    /* Estilos del Carrusel Cinemático GSAP */
+    .card {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-position: center;
+      background-size: cover;
+      box-shadow: 6px 6px 20px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #FFFFFFDD;
+      padding-left: 16px;
+    }
+
+    .details {
+      position: absolute;
+      top: 220px;
+      left: 60px;
+      z-index: 22;
+      max-width: 500px;
+    }
+
     .glass-card {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
       transition: all 0.4s ease;
     }
     .glass-card:hover {
       transform: translateY(-6px);
-      border-color: rgba(56, 189, 248, 0.8);
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
     }
     .glass-nav {
-      background: rgba(5, 11, 20, 0.95);
+      background: rgba(5, 11, 20, 0.85);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -44,131 +78,165 @@
 </head>
 <body x-data="{ modalRegistro: false, modalLightbox: false, imgActual: '', empresaActual: '' }" class="min-h-screen flex flex-col">
 
+  <!-- Barra de progreso superior del carrusel -->
+  <div class="indicator fixed top-0 left-0 right-0 h-[5px] bg-[#75AADB] z-[60] pointer-events-none"></div>
+
   <!-- ==================== MENÚ DE NAVEGACIÓN ==================== -->
-  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav px-6 py-4">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <a href="#" class="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-teal-300 to-amber-300">
-        Denia<span class="text-white">Hoy</span>
-      </a>
-
-      <div class="hidden lg:flex items-center space-x-8 text-sm font-medium text-slate-200">
-        <div class="relative" x-data="{ openCat: false }">
-          <button @click="openCat = !openCat" @click.outside="openCat = false" class="flex items-center space-x-1 hover:text-sky-400 transition-colors py-2">
-            <span>Categorías</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div x-show="openCat" class="absolute top-full left-0 mt-2 w-56 glass-card rounded-2xl p-3 shadow-2xl z-50 text-left">
-            <a href="#destacados" class="block px-4 py-2 rounded-xl hover:bg-sky-500/20 text-sky-300 font-semibold">🍕 Restaurantes & Tapas</a>
-            <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🛍️ Comercios & Tiendas</a>
-            <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🏨 Alojamientos</a>
-            <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🎉 Ocio y Eventos</a>
-          </div>
-        </div>
-        <a href="#planes" class="hover:text-sky-400">Planes</a>
-        <a href="#galeria" class="hover:text-sky-400">Galería</a>
-        <a href="#mapa" class="hover:text-sky-400">Mapa 3D</a>
-        <a href="#contacto" class="hover:text-sky-400">Contacto</a>
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav px-8 py-4 flex items-center justify-between text-sm font-medium">
+    <div class="inline-flex items-center space-x-3 uppercase">
+      <div class="w-6 h-6 text-sky-400">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M18.5 12L22 12M17.63 8.75L20.66 7M15.25 6.37L17 3.34M12 5.5L12 2M8.75 6.37L7 3.34M6.37 8.75L3.34 7M5.5 12L2 12M6.37 15.25L3.34 17M8.75 17.63L7 20.66M12 18.5L12 22M15.25 17.63L17 20.66M17.63 15.25L20.66 17"/></svg>
       </div>
+      <span class="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-teal-300 to-amber-300">Denia Hoy</span>
+    </div>
 
-      <button @click="modalRegistro = true" class="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold text-xs uppercase shadow-lg hover:scale-105 transition-all">
+    <div class="hidden lg:flex items-center space-x-8">
+      <div class="relative" x-data="{ openCat: false }">
+        <button @click="openCat = !openCat" @click.outside="openCat = false" class="flex items-center space-x-1 hover:text-sky-400 transition-colors py-2">
+          <span>Categorías</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div x-show="openCat" class="absolute top-full left-0 mt-2 w-56 glass-card rounded-2xl p-3 shadow-2xl z-50 text-left">
+          <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-sky-500/20 text-sky-300 font-semibold">🍕 Restaurantes & Tapas</a>
+          <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🛍️ Comercios & Tiendas</a>
+          <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🏨 Alojamientos</a>
+          <a href="#directorio" class="block px-4 py-2 rounded-xl hover:bg-white/10 text-slate-300">🎉 Ocio y Eventos</a>
+        </div>
+      </div>
+      <a href="#directorio" class="hover:text-sky-400">Directorio</a>
+      <a href="#planes" class="hover:text-sky-400">Planes</a>
+      <a href="#galeria" class="hover:text-sky-400">Galería</a>
+      <a href="#mapa" class="hover:text-sky-400">Mapa 3D</a>
+    </div>
+
+    <div>
+      <button @click="modalRegistro = true" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold text-xs uppercase shadow-lg hover:scale-105 transition-all">
         ➕ Registra tu Negocio
       </button>
     </div>
   </nav>
 
-  <!-- ==================== HERO SECTION ==================== -->
-  <header class="pt-40 pb-20 px-6 text-center max-w-4xl mx-auto flex flex-col items-center">
-    <span class="px-4 py-1.5 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 uppercase mb-6 inline-block">
-      ✨ Portal Oficial e Interactivo de Dénia
-    </span>
-    <h1 class="text-4xl md:text-7xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-sky-100 to-teal-300 mb-6 leading-tight">
-      Todo lo que buscas en Dénia en un solo lugar
-    </h1>
-    <p class="text-slate-200 text-lg md:text-xl max-w-2xl mb-10">
-      Encuentra la mejor gastronomía, eventos de la ciudad, ofertas y comercios locales recomendados.
-    </p>
+  <!-- ==================== SECCIÓN 1: HERO CARRUSEL CINEMATOGRÁFICO DE DÉNIA ==================== -->
+  <header class="relative w-full h-screen overflow-hidden" id="demo">
+    <!-- Paneles de detalles A/B alternantes -->
+    <div class="details" id="details-even">
+      <div class="place-box h-[46px] overflow-hidden relative">
+        <div class="text pt-4 text-xl relative pl-8 font-medium">
+          <div class="absolute top-0 left-0 w-[30px] h-[4px] rounded-full bg-white"></div>
+          <span>Gastronomía Dénia</span>
+        </div>
+      </div>
+      <div class="title-box-1 mt-1 h-[100px] overflow-hidden">
+        <div class="title-1 display-font text-[72px] leading-none">PIZZAS Y</div>
+      </div>
+      <div class="title-box-2 mt-1 h-[100px] overflow-hidden">
+        <div class="title-2 display-font text-[72px] leading-none">PASTAS</div>
+      </div>
+      <div class="desc mt-4 w-[500px] text-sm text-slate-300 leading-relaxed">
+        Pizzas artesanales, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat. El punto de referencia gastronómico en Dénia.
+      </div>
+      <div class="cta w-[500px] mt-6 flex items-center">
+        <a href="http://www.casapapat.es" target="_blank" class="w-[36px] h-[36px] rounded-full bg-[#75AADB] text-white grid place-items-center shadow-lg">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"/></svg>
+        </a>
+        <a href="http://www.casapapat.es" target="_blank" class="border border-white bg-transparent h-[36px] rounded-full text-white px-6 text-xs font-semibold uppercase ml-4 grid place-items-center hover:bg-white/10 transition-colors">
+          Visitar Casa Papat
+        </a>
+      </div>
+    </div>
 
-    <div class="w-full max-w-2xl glass-card p-3 rounded-2xl flex flex-col md:flex-row gap-3">
-      <input type="text" placeholder="¿Qué buscas hoy? (ej. Pizzería, Feria, Ferry...)" class="w-full bg-transparent px-4 py-3 text-white placeholder-slate-300 focus:outline-none text-sm">
-      <button class="px-8 py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl shadow-lg text-sm">
-        Buscar
-      </button>
+    <div class="details" id="details-odd" style="opacity: 0;">
+      <div class="place-box h-[46px] overflow-hidden relative">
+        <div class="text pt-4 text-xl relative pl-8 font-medium">
+          <div class="absolute top-0 left-0 w-[30px] h-[4px] rounded-full bg-white"></div>
+          <span>Gastronomía Dénia</span>
+        </div>
+      </div>
+      <div class="title-box-1 mt-1 h-[100px] overflow-hidden">
+        <div class="title-1 display-font text-[72px] leading-none">PIZZAS Y</div>
+      </div>
+      <div class="title-box-2 mt-1 h-[100px] overflow-hidden">
+        <div class="title-2 display-font text-[72px] leading-none">PASTAS</div>
+      </div>
+      <div class="desc mt-4 w-[500px] text-sm text-slate-300 leading-relaxed">
+        Pizzas artesanales, masa madre fermentada lentamente e ingredientes prémium en Pizzería Casa Papat.
+      </div>
+      <div class="cta w-[500px] mt-6 flex items-center">
+        <a href="http://www.casapapat.es" target="_blank" class="w-[36px] h-[36px] rounded-full bg-[#75AADB] text-white grid place-items-center shadow-lg">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"/></svg>
+        </a>
+        <a href="http://www.casapapat.es" target="_blank" class="border border-white bg-transparent h-[36px] rounded-full text-white px-6 text-xs font-semibold uppercase ml-4 grid place-items-center hover:bg-white/10 transition-colors">
+          Visitar Casa Papat
+        </a>
+      </div>
+    </div>
+
+    <!-- HUD inferior derecho del carrusel -->
+    <div class="pagination absolute z-60 inline-flex items-center" id="pagination">
+      <div class="arrow arrow-left w-[50px] h-[50px] rounded-full border-2 border-white/40 grid place-items-center cursor-pointer hover:border-white transition-colors">
+        <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+      </div>
+      <div class="arrow arrow-right w-[50px] h-[50px] rounded-full border-2 border-white/40 grid place-items-center cursor-pointer hover:border-white transition-colors ml-5">
+        <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+      </div>
+      <div class="progress-sub-container ml-6 w-[500px] flex items-center">
+        <div class="progress-sub-background w-[500px] h-[3px] bg-white/20 relative">
+          <div class="progress-sub-foreground h-[3px] bg-[#75AADB] absolute left-0 top-0"></div>
+        </div>
+      </div>
+      <div class="slide-numbers w-[50px] h-[50px] overflow-hidden relative ml-4" id="slide-numbers"></div>
     </div>
   </header>
 
-  <!-- ==================== TARJETAS DESTACADAS ==================== -->
-  <section id="destacados" class="py-16 px-6 max-w-7xl mx-auto w-full">
+  <!-- ==================== SECCIÓN 2: DIRECTORIO Y COMERCIOS ==================== -->
+  <section id="directorio" class="py-20 px-6 max-w-7xl mx-auto w-full">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-extrabold text-white">Destacados de Dénia Hoy</h2>
-      <p class="text-slate-300 text-sm mt-2">Gastronomía recomendada, eventos y servicios imprescindibles.</p>
+      <span class="text-xs uppercase font-bold text-sky-400 tracking-widest mb-2 inline-block">Directorio Local Inteligente</span>
+      <h2 class="text-3xl md:text-5xl font-black text-white">Comercios y Gastronomía en Dénia</h2>
+      <p class="text-slate-400 text-sm mt-2">Encuentra los mejores locales recomendados con reseñas reales de Google Maps.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      
-      <!-- Ficha 1: Pizzería Casa Papat -->
+      <!-- Ficha Casa Papat -->
       <div class="glass-card rounded-2xl overflow-hidden relative group">
-        <span class="absolute top-4 right-4 z-10 bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full shadow-lg">⭐ 4.8 / 5</span>
-        <div class="h-56 overflow-hidden relative">
+        <span class="absolute top-4 right-4 z-10 bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-full shadow-lg">⭐ 4.8 / 5 ⭐</span>
+        <div class="h-60 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80" alt="Casa Papat" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
         </div>
         <div class="p-6">
           <h3 class="text-xl font-bold text-white mb-2">Pizzería Casa Papat</h3>
-          <p class="text-slate-200 text-sm mb-4">Pizzas y pastas artesanales, masa madre fermentada lentamente e ingredientes prémium.</p>
-          <p class="text-xs text-sky-300 mb-6">🌐 <a href="http://www.casapapat.es" target="_blank" class="underline">www.casapapat.es</a></p>
+          <p class="text-slate-300 text-sm mb-4">Pizzas y pastas artesanales con masa madre y productos italianos.</p>
+          <div class="text-xs text-sky-300 mb-6 space-y-1">
+            <p>📍 Dénia, Alicante</p>
+            <p>🌐 <a href="http://www.casapapat.es" target="_blank" class="underline hover:text-white">www.casapapat.es</a></p>
+          </div>
           <a href="http://www.casapapat.es" target="_blank" class="block text-center w-full py-3 bg-gradient-to-r from-sky-500 to-teal-500 text-white font-bold rounded-xl shadow-lg">Ver Carta y Reservar</a>
         </div>
       </div>
 
-      <!-- Ficha 2: Feria de Dénia -->
+      <!-- Ficha Feria de Dénia -->
       <div class="glass-card rounded-2xl overflow-hidden relative group">
         <span class="absolute top-4 right-4 z-10 bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">🎉 Evento</span>
-        <div class="h-56 overflow-hidden relative">
+        <div class="h-60 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80" alt="Feria" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
         </div>
         <div class="p-6">
           <h3 class="text-xl font-bold text-white mb-2">Feria de Dénia</h3>
-          <p class="text-slate-200 text-sm mb-4">Atracciones, puestos gastronómicos y ambiente festivo familiar en Torrecremada.</p>
-          <p class="text-xs text-amber-300 mb-6">📍 Explanada Torrecremada</p>
+          <p class="text-slate-300 text-sm mb-4">Atracciones, puestos gastronómicos y ambiente festivo familiar en Torrecremada.</p>
+          <div class="text-xs text-amber-300 mb-6 space-y-1">
+            <p>📍 Explanada Torrecremada</p>
+            <p>🗓️ Todo el mes</p>
+          </div>
           <button class="w-full py-3 bg-slate-800/80 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-600">Ver Programa</button>
         </div>
       </div>
 
-      <!-- Ficha 3: Baleària -->
+      <!-- Ficha Baleària -->
       <div class="glass-card rounded-2xl overflow-hidden relative group">
-        <span class="absolute top-4 right-4 z-10 bg-teal-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg">🚢 Puerto</span>
-        <div class="h-56 overflow-hidden relative">
+        <span class="absolute top-4 right-4 z-10 bg-teal-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg">🚢 Transporte</span>
+        <div class="h-60 overflow-hidden relative">
           <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80" alt="Baleària" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
         </div>
         <div class="p-6">
           <h3 class="text-xl font-bold text-white mb-2">Baleària - Rutas</h3>
-          <p class="text-slate-200 text-sm mb-4">Conecta Dénia en ferry directo con Ibiza, Mallorca y Formentera.</p>
-          <p class="text-xs text-teal-300 mb-6">🏝️ Salidas diarias desde puerto</p>
-          <button class="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-600 text-white font-bold rounded-xl shadow-lg">Ver Trayectos</button>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==================== BANNER PUBLICITARIO ==================== -->
-  <section class="py-6 px-6 max-w-7xl mx-auto w-full">
-    <div class="glass-card rounded-2xl p-8 text-center border-amber-500/30">
-      <span class="text-xs uppercase font-bold text-amber-400 mb-2 inline-block">Espacio Publicitario</span>
-      <h3 class="text-2xl font-extrabold text-white mb-3">¿Quieres que tu comercio aparezca aquí?</h3>
-      <a href="#planes" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-xl inline-block mt-2">Anúnciate</a>
-    </div>
-  </section>
-
-  <!-- ==================== GALERÍA ==================== -->
-  <section id="galeria" class="py-16 px-6 max-w-7xl mx-auto w-full">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl font-extrabold text-white">Galería Interactiva</h2>
-    </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Pizzería Casa Papat'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
-        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-950/70 px-2.5 py-1 rounded-lg">Casa Papat</div>
-      </div>
-      <div @click="modalLightbox = true; imgActual = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80'; empresaActual = 'Galadriel Concept'" class="glass-card rounded-2xl overflow-hidden cursor-pointer h-52 relative group">
-        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        <div class="absolute bottom-2 left-2 text-xs font-bold text-sky-300 bg-slate-9
+          <p class="text-slate-300 text-sm mb
